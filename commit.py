@@ -106,7 +106,7 @@ def main():
     if not current_branch:
         console.print("[bold red]Не удалось определить текущую ветку. Убедитесь, что это Git-репозиторий.[/bold red]"); sys.exit(1)
 
-    commit_message = Prompt.ask("[bold yellow]📝 Введите сообщение для коммита[/bold yellow]", default="feat: add new feature")
+    commit_message = Prompt.ask("[bold yellow]📝 Введите сообщение для коммита[/bold yellow]")
     target_branch = Prompt.ask("[bold yellow]🎯 В какую ветку отправить изменения?[/bold yellow]", default="dev")
     console.print(f"Выбрана ветка для пуша: [bold green]{target_branch}[/bold green]"); console.print("-" * 30)
 

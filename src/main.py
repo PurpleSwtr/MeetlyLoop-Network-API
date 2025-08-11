@@ -61,11 +61,7 @@ app = FastAPI(
     title="My Network API",
 )
 
-# --- ДОБАВЛЕНА РАЗДАЧА СТАТИЧЕСКИХ ФАЙЛОВ ---
-# Это позволит браузеру получать доступ к вашим css и js файлам
-# Путь "/static" будет соответствовать папке "frontend/static"
-app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
-# --- КОНЕЦ ДОБАВЛЕНИЯ ---
+# app.mount("/static", StaticFiles(directory="frontend/static"), name="static")
 
 
 app.add_middleware(

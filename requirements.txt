@@ -1,0 +1,11 @@
+# requirements.txt
+fastapi
+uvicorn[standard]
+sqlalchemy
+asyncpg
+psycopg2-binary
+pydantic-settings
+python-dotenv
+
+httpx
+async-lru

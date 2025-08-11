@@ -2,7 +2,7 @@
 from datetime import datetime
 from pydantic import BaseModel, ConfigDict
 
-from src.models.users.schemas import UserRead
+from src.modules.users.schemas import UserRead
 
 
 

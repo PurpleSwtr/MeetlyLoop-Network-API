@@ -1,7 +1,21 @@
 # src/models/posts/schemas.py
-from pydantic import BaseModel
+from datetime import datetime
+from pydantic import BaseModel, ConfigDict
 
-class UserRead(BaseModel):
+from src.models.users.schemas import UserRead
+
+
+
+
+# Схема для отображения поста
+class PostRead(BaseModel):
     id: int
-    nickname: str
+    title: str
+    description: str
+    theme: str | None
+    created_at: datetime | None
+    
+    # Вложенная схема для автора
+    author: UserRead
 
+    model_config = ConfigDict(from_attributes=True)

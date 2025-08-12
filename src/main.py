@@ -52,8 +52,8 @@ from sqlalchemy import select, insert
 
 from src.core.database import sync_engine, async_engine, sync_session_factory, get_async_session
 
-from src.modules.users.model import UsersORM
-from src.modules.posts.model import PostsORM
+from src.components.users.model import UsersORM
+from src.components.posts.model import PostsORM
 
 from src.api import main_router
 

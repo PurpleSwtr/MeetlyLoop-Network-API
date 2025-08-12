@@ -7,7 +7,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 from src.core.database import Base
 
 if TYPE_CHECKING:
-    from models.posts.model import PostsORM
+    from components.posts.model import PostsORM
 
 
 class UsersORM(Base):

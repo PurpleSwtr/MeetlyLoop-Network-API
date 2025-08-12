@@ -4,7 +4,7 @@ from fastapi import APIRouter
 from sqlalchemy import select, insert
 
 from src.api.dependencies import SessionDep
-from src.modules.users.model import UsersORM
+from src.components.users.model import UsersORM
 
 router = APIRouter()
 

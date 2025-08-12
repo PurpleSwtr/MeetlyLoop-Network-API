@@ -38,7 +38,7 @@ from .schemas import PostRead
 # --- КОНЕЦ ДОБАВЛЕНИЙ ---
 
 from src.api.dependencies import SessionDep
-from src.modules.posts.model import PostsORM
+from src.components.posts.model import PostsORM
 
 router = APIRouter()
 

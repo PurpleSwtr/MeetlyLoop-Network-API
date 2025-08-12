@@ -1,3 +1,5 @@
+# python commit.py
+
 import os
 import subprocess
 import sys
@@ -101,12 +103,12 @@ def main():
     if current_branch:
         header_text += f"Текущая ветка: [bold yellow]{current_branch}[/bold yellow]"
     
-    console.print(Panel(header_text, title="[bold magenta]🚀 Git-Автоматор[/bold magenta]", expand=False, border_style="magenta"))
+    console.print(Panel(header_text, title="[bold magenta]🚀 Git-Helper[/bold magenta]", expand=False, border_style="magenta"))
     
     if not current_branch:
         console.print("[bold red]Не удалось определить текущую ветку. Убедитесь, что это Git-репозиторий.[/bold red]"); sys.exit(1)
 
-    commit_message = Prompt.ask("[bold yellow]📝 Введите сообщение для коммита[/bold yellow]", default="feat: add new feature")
+    commit_message = Prompt.ask("[bold yellow]📝 Введите сообщение для коммита[/bold yellow]")
     target_branch = Prompt.ask("[bold yellow]🎯 В какую ветку отправить изменения?[/bold yellow]", default="dev")
     console.print(f"Выбрана ветка для пуша: [bold green]{target_branch}[/bold green]"); console.print("-" * 30)
 

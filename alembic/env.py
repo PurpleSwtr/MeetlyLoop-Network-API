@@ -11,8 +11,8 @@ from sqlalchemy import pool
 from alembic import context
 
 from src.core.config import settings
-from src.components.posts.model import PostsORM
-from src.components.users.model import UsersORM
+from src.components.posts.models import PostsORM
+from src.components.users.models import UsersORM
 from src.core.database import Base
 
 config = context.config

@@ -1,9 +1,10 @@
 import datetime
-from typing import TYPE_CHECKING, Annotated, Dict, List, Optional, Union
-from sqlalchemy import ForeignKey, String, text, DateTime
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from typing import Annotated
+from sqlalchemy import text
+from sqlalchemy.orm import mapped_column
 
 intpk = Annotated[int, mapped_column(primary_key=True)]
 
-created_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"), nullable=True)]
-updated_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"), onupdate=datetime.datetime.utcnow, nullable=True)]
+created_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"))]
+updated_at = Annotated[datetime.datetime, mapped_column(server_default=text("TIMEZONE('utc', now())"), onupdate=datetime.datetime.utcnow)]
+

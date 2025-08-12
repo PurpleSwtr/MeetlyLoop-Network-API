@@ -1,41 +1,45 @@
-# import asyncio
-# from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-# from sqlalchemy.orm import sessionmaker, Session
-# from sqlalchemy import URL, create_engine, text
-# from sqlalchemy.exc import SQLAlchemyError
-# from .config import settings
-# from users.models import metadata_obj
+from typing import Annotated, AsyncGenerator
 
-from typing import AsyncGenerator
-
-from sqlalchemy import create_engine
+from sqlalchemy import String, create_engine
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
 
-from sqlalchemy.orm import Session, sessionmaker, DeclarativeBase
-
+from sqlalchemy.orm import sessionmaker, DeclarativeBase
 
 from .config import settings
 
+str_256 = Annotated[str, 256]
+
 class Base(DeclarativeBase):
-    pass
+    type_annotation_map = {
+        str_256: String(256)
+    }
+
+    repr_cols_num = 3
+    repr_cols = tuple()
+
+    def __repr__(self):
+        """Связи не используются в repr(), поскольку они могут привести к неожиданным загрузкам."""
+        cols = []
+        for idx, col in enumerate(self.__table__.columns.keys()): # <--- Правильно: __table__
+            if col in self.repr_cols or idx < self.repr_cols_num:
+                cols.append(f"[{col}: {getattr(self, col)}]")
+        return f"<{self.__class__.__name__} {', '.join(cols)}>" # <--- Правильно: self.__class__.__name__
+
 
 sync_engine = create_engine(
     url=settings.DATABASE_URL_SYNC,
-    echo=True,
+    echo=settings.ECHO_MODE_OPTION,
 )
 
 async_engine = create_async_engine(
     url=settings.DATABASE_URL_ASYNC,
-    echo=True,
+    echo=settings.ECHO_MODE_OPTION,
 )
 
 sync_session_factory = sessionmaker(sync_engine)
 async_session_factory = async_sessionmaker(async_engine, expire_on_commit=False)
 
-# async def test():
-#     async with engine.connect() as conn:
-#         res = await conn.execute(text("SELECT 1"))
-#         print(f"res: {res.all()=}")
+
 
 # Функция-зависимость для получения сессии в эндпоинтах FastAPI
 async def get_async_session() -> AsyncGenerator[AsyncSession, None]:

@@ -13,3 +13,8 @@ class UserCreate(BaseModel):
     email: str
     password_hash: str
     description: Optional[str]
+
+class UserAccount(BaseModel):
+    nickname: str
+    email: str
+    description: Optional[str]

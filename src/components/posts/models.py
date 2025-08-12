@@ -26,4 +26,6 @@ class PostsORM(Base):
 
     repr_cols = ("created_at", "updated_at")
 
-    author: Mapped["UsersORM"] = relationship(back_populates="posts")
+    author: Mapped["UsersORM"] = relationship(back_populates="posts") # , lazy="selectinload"
+
+   

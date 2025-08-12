@@ -4,9 +4,6 @@ from pydantic import BaseModel, ConfigDict
 
 from src.components.users.schemas import UserRead
 
-
-
-
 # Схема для отображения поста
 class PostRead(BaseModel):
     id: int

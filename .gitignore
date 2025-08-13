@@ -16,7 +16,7 @@ alembic.ini.bak # Alembic иногда создает бэкапы
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
+frontend/package-lock.json
 # --- Docker ---
 # Если вы не хотите хранить данные БД в репозитории (правильно!)
 # Но у нас они хранятся в Docker Volume, так что это просто для подстраховки

@@ -14,7 +14,7 @@ function MainPage() {
       pt-100 pl-20'
     >
       <>
-      Welcome.
+      MeetlyLoop
       </>
       <span className="animate-pulse">
       |

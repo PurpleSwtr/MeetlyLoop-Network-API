@@ -1,0 +1,25 @@
+# --- Web Framework ---
+fastapi
+uvicorn[standard]
+
+# --- Database & ORM ---
+sqlalchemy
+asyncpg
+psycopg2-binary
+alembic
+
+# --- Security & Authentication ---
+passlib[bcrypt]
+python-jose[cryptography]
+
+# --- Settings & Environment ---
+pydantic-settings
+python-dotenv
+
+# --- Utilities ---
+httpx
+async-lru
+rich
+
+# --- Formatting & Linting (NEW) ---
+black

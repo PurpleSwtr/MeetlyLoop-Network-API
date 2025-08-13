@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx", // Важно для Vite + React
+    "moduleResolution": "bundler", // или "node"
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"] // Пример настройки алиасов, если используете
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}

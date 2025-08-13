@@ -1,0 +1,6 @@
+/* app.css */
+@import "tailwindcss";
+
+@theme {
+  --meetly-color: #7359f2;
+}

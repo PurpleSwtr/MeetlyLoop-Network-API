@@ -1,0 +1,26 @@
+# --- Python / FastAPI ---
+.env
+.venv/
+venv/
+__pycache__/
+*.pyc
+.vscode/
+alembic.ini.bak # Alembic иногда создает бэкапы
+
+# --- Node.js / React ---
+/frontend/node_modules
+/frontend/dist
+/frontend/.DS_Store
+/frontend/.env.local
+/frontend/.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# --- Docker ---
+# Если вы не хотите хранить данные БД в репозитории (правильно!)
+# Но у нас они хранятся в Docker Volume, так что это просто для подстраховки
+postgres_data/
+
+# --- Игнорирование сгенерированных файлов ---
+*_summary.md

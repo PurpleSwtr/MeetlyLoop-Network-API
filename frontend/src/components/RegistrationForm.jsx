@@ -5,7 +5,7 @@ export default function RegForm({ onSuccess }) {
   const handleFormFinish = async (values) => {
   values.description = "";
   
-  console.log('Отправляем на бэкенд:', values);
+  console.log('values:', values);
 
   try {
     // Получаем URL нашего API из переменных окружения Vite
@@ -15,7 +15,7 @@ export default function RegForm({ onSuccess }) {
     const response = await axios.post(`${apiUrl}/create_user`, values);
 
     // Ответ от сервера уже в формате JSON и находится в response.data
-    console.log('Ответ от сервера:', response.data);
+    console.log('response:', response.data);
 
     if (onSuccess) {
       onSuccess();

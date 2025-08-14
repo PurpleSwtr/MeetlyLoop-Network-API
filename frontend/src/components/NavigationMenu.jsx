@@ -16,9 +16,9 @@ const options = [
   { label: "Настройки", value: "Settings", icon: <SettingOutlined /> },
 ];
 
-const Demo = () => {
+const Demo = ({ onMenuChanged }) => {
   const [selectedValue, setSelectedValue] = useState("Home");
-
+  console.log("", selectedValue);
   const activeColor = "#7259F3";
 
   return (
@@ -45,6 +45,8 @@ const Demo = () => {
     </div>
 
   );
+
+  
 };
 // p-2 border border-gray-300 rounded-lg
 export default Demo;

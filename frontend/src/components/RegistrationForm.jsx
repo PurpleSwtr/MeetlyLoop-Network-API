@@ -5,25 +5,18 @@ export default function RegForm({ onSuccess }) {
   const handleFormFinish = async (values) => {
   values.description = "";
   
-  console.log('values:', values);
+  console.log('Отправляем на бэкенд:', values);
 
   try {
-    // Получаем URL нашего API из переменных окружения Vite
-    const apiUrl = import.meta.env.VITE_API_URL;
+    const response = await axios.post('/api/create_user', values);
 
-    // Используем axios для отправки POST-запроса
-    const response = await axios.post(`${apiUrl}/create_user`, values);
-
-    // Ответ от сервера уже в формате JSON и находится в response.data
     console.log('response:', response.data);
 
     if (onSuccess) {
       onSuccess();
     }
   } catch (error) {
-    // axios автоматически выбрасывает ошибку при статусах 4xx/5xx
     console.error("Не удалось отправить запрос:", error);
-    // setResponseMessage('Произошла ошибка при отправке данных.'); // <-- Можете раскомментировать, если у вас есть такое состояние
   }
 };
 

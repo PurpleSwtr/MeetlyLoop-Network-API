@@ -27,12 +27,15 @@ services:
 
   # 2. Сервис Бэкенда
   backend:
-    build: ./backend
+    build:
+      context: . # Указываем, что Dockerfile находится в текущей директории
+      dockerfile: backend/Dockerfile # Явно указываем путь к Dockerfile
     container_name: MeetlyLoop_backend
     ports:
       - "8000:8000"
     volumes:
-      - ./backend:/code
+      - ./backend/src:/code/src
+      # - ./frontend/dist:/code/dist  # <--- УДАЛИТЕ ИЛИ ЗАКОММЕНТИРУЙТЕ ЭТУ СТРОКУ
     env_file:
       - ./.env
     # Указываем, что нужно дождаться, пока сервис 'db' не станет "здоровым"

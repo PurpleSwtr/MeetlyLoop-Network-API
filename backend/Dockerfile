@@ -1,20 +1,36 @@
 # ./backend/Dockerfile
 
-# 1. Используем официальный образ Python
+# --- СТУПЕНЬ 1: Сборщик Фронтенда (The Frontend Builder) ---
+# Мы используем образ Node.js, даем ему псевдоним "frontend-builder"
+FROM node:18 AS frontend-builder
+
+# Устанавливаем рабочую директорию
+WORKDIR /app
+
+# Копируем ИСХОДНЫЙ код фронтенда в этот временный контейнер
+COPY ./frontend /app
+
+# Устанавливаем зависимости и ЗАПУСКАЕМ СБОРКУ
+RUN npm install
+RUN npm run build
+
+
+# --- СТУПЕНЬ 2: Финальный Бэкенд-сервер (The Final Backend) ---
+# Начинаем с чистого листа, с образа Python, как и раньше
 FROM python:3.11-slim
 
-# 2. Устанавливаем рабочую директорию внутри контейнера
 WORKDIR /code
 
-# 3. Устанавливаем системные зависимости, если они нужны (например, для psycopg2)
-# В случае с -slim образом это может понадобиться.
-# RUN apt-get update && apt-get install -y ...
-
-# 4. Копируем файл с зависимостями и устанавливаем их (оптимизация кэширования)
-COPY ./requirements.txt /code/requirements.txt
+# Копируем зависимости бэкенда и устанавливаем их
+COPY ./backend/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# 5. Копируем весь остальной код приложения (Alembic, app и т.д.)
-COPY . /code
+# Копируем исходный код бэкенда
+COPY ./backend /code
 
-# Команда запуска будет в docker-compose.yml, чтобы легко управлять миграциями.
+# --- ГЛАВНЫЙ МОМЕНТ! ---
+# Копируем папку `dist` из контейнера-сборщика (frontend-builder)
+# в наш финальный контейнер, где FastAPI сможет ее найти.
+COPY --from=frontend-builder /app/dist /code/dist
+
+# Команда запуска остается в docker-compose.yml

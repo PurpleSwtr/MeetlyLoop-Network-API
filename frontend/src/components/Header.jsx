@@ -1,5 +1,5 @@
 import logo from "../assets/icons/MeetlyLoopUp-Photoroom.png"
-import ComponentCard from "./Card.jsx"
+import ComponentCard from "./NavigationMenu.jsx"
 import ComponentSearchLine from "./SearchLine.jsx"
 import { LinearGradient } from "react-text-gradients"
 

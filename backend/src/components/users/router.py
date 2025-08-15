@@ -6,7 +6,6 @@ from src.api.dependencies import SessionDep
 from src.components.users.models import UsersORM
 from src.components.users.schemas import UserRead, UserCreate, UserAccount
 
-
 router = APIRouter()
 
 @router.get("/get_users",

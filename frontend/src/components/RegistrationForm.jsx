@@ -1,24 +1,37 @@
-import { Card, Form, Input, Button, ConfigProvider } from "antd"; // Добавил ConfigProvider, он у вас был
+import { useState } from 'react'; // 👈 1. Импортируем useState
+import { Card, Form, Input, Button, ConfigProvider } from "antd";
 import axios from 'axios';
 
 export default function RegForm({ onSuccess }) {
+  // 2. Создаем состояние для хранения сообщения об ошибке
+  const [errorMessage, setErrorMessage] = useState('');
+
+  // Этот обработчик сработает ТОЛЬКО если все поля валидны
   const handleFormFinish = async (values) => {
-  values.description = "";
+    setErrorMessage(''); // Очищаем ошибку при успешной отправке
+    values.description = "";
   
-  console.log('Отправляем на бэкенд:', values);
+    console.log('Отправляем на бэкенд:', values);
 
-  try {
-    const response = await axios.post('/api/create_user', values);
-
-    console.log('response:', response.data);
-
-    if (onSuccess) {
-      onSuccess();
+    try {
+      const response = await axios.post('/api/create_user', values);
+      console.log('response:', response.data);
+      if (onSuccess) {
+        onSuccess();
+      }
+    } 
+    catch (error) {
+      console.error("Не удалось отправить запрос:", error);
+      // Показываем ошибку, если что-то пошло не так на сервере
+      setErrorMessage('Ошибка регистрации. Попробуйте снова.'); 
     }
-  } catch (error) {
-    console.error("Не удалось отправить запрос:", error);
-  }
-};
+  };   
+
+  // 3. Этот обработчик сработает, если валидация НЕ пройдена
+  const handleFormFinishFailed = (errorInfo) => {
+    console.log('Validation Failed:', errorInfo);
+    setErrorMessage('Пожалуйста, заполните все обязательные поля.');
+  };
 
   const meetlyColor = "#7259F3"; 
 
@@ -40,25 +53,55 @@ export default function RegForm({ onSuccess }) {
           </div>
         }
       >
-        {/* 👇 ДОБАВЛЯЕМ ЭТОТ DIV С МИНИМАЛЬНОЙ ВЫСОТОЙ 👇 */}
         <div className="min-h-[380px] flex flex-col justify-center">
-          <Form layout="vertical" onFinish={handleFormFinish}>
-            <Form.Item name="nickname" label="Имя пользователя">
+          {/* 4. Добавляем обработчики в Form */}
+          <Form 
+            layout="vertical" 
+            onFinish={handleFormFinish}
+            onFinishFailed={handleFormFinishFailed}
+          >
+            {/* 5. Добавляем правила валидации (rules) */}
+            <Form.Item 
+              name="nickname" 
+              label="Имя пользователя"
+              rules={[{ required: true, message: 'Введите имя пользователя!' }]}
+            >
               <Input placeholder="username" size="large" /> 
             </Form.Item>
-            <Form.Item name="email" label="Email">
+
+            <Form.Item 
+              name="email" 
+              label="Email"
+              rules={[
+                { required: true, message: 'Введите email!' },
+                { type: 'email', message: 'Введите корректный email!' }
+              ]}
+            >
               <Input type="email" placeholder="email@example.com" size="large" />
             </Form.Item>
-            <Form.Item name="password_hash" label="Пароль">
+
+            <Form.Item 
+              name="password_hash" 
+              label="Пароль"
+              rules={[{ required: true, message: 'Введите пароль!' }]}
+            >
               <Input.Password placeholder="password" size="large" />
             </Form.Item>
+            
             <Form.Item>
               <Button type="primary" htmlType="submit" block size="large">
                 Зарегистрироваться
               </Button>
             </Form.Item>
+
+            {/* 6. Показываем ошибку из состояния, если она есть */}
+            {errorMessage && (
+              <p className="text-center text-lg text-red-400">
+                {errorMessage}
+              </p>
+            )}
           </Form>
-        </div> {/* 👈 И ЗАКРЫВАЕМ ЕГО */}
+        </div>
       </Card>
     </ConfigProvider>
   );

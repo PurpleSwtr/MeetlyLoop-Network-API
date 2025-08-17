@@ -22,8 +22,12 @@ async-lru
 rich
 
 # --- Auth ---
-
 authx
 
 # --- Formatting & Linting (NEW) ---
 black
+
+# --- Testing ---
+pytest
+pytest-asyncio
+pytest-dotenv

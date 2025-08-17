@@ -1,5 +1,6 @@
-# core/config.py
+# backend/src/core/config.py
 from pydantic_settings import BaseSettings, SettingsConfigDict
+
 class Settings(BaseSettings):
     DB_HOST: str
     DB_PORT: int
@@ -10,6 +11,10 @@ class Settings(BaseSettings):
     ECHO_MODE: bool
     JWT_KEY: str
     JWT_ACCESS_COOKIE: str
+    
+    # Добавляем необязательное поле TEST_MODE
+    TEST_MODE: bool = False
+
     @property
     def DATABASE_URL_ASYNC(self) -> str:
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
@@ -22,6 +27,12 @@ class Settings(BaseSettings):
     def ECHO_MODE_OPTION(self) -> bool:
         return self.ECHO_MODE
 
-    model_config = SettingsConfigDict(env_file=".env")
+    # --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
+    # Мы указываем список файлов. Pydantic попробует загрузить первый, который найдет.
+    # В тестах он найдет .env.test. При запуске в Docker - .env.
+    model_config = SettingsConfigDict(
+        env_file=(".env.test", ".env"),
+        extra='ignore'  # <-- ДОБАВЬТЕ ЭТУ СТРОЧКУ
+    )
 
 settings = Settings()

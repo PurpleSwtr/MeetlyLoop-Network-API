@@ -1,5 +1,6 @@
 # --- Python / FastAPI ---
 .env
+.env.test
 .venv/
 venv/
 __pycache__/

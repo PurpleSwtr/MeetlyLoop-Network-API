@@ -1,7 +1,7 @@
 # src/models/users/models.py
 
 from typing import TYPE_CHECKING
-from sqlalchemy import String
+from sqlalchemy import String, Boolean
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from src.core.annotated_types import intpk, created_at, updated_at

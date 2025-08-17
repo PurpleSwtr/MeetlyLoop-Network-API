@@ -45,9 +45,31 @@ async def create_new_user(
     session: SessionDep, 
     user_data: UserCreate
     ):
-    new_user = UsersORM(**user_data.model_dump())
+    # 1. Превращаем Pydantic-схему в обычный словарь
+    user_data_dict = user_data.model_dump()
+    
+    # 2. "Вытаскиваем" флаг из словаря. Теперь в user_data_dict его нет.
+    remember_me = user_data_dict.pop("remember_me_flag")
+    
+    # --- Вот здесь ты можешь использовать флаг для своей логики ---
+    print(f"Флаг 'Запомнить меня' получен: {remember_me}")
+    if remember_me:
+        print("Нужно будет сгенерировать долгоживущий токен!")
+    else:
+        print("Нужно будет сгенерировать короткоживущий токен.")
+    # -------------------------------------------------------------
+
+    # 3. Создаем объект ORM только с теми данными, что остались в словаре
+    new_user = UsersORM(**user_data_dict)
+    
     session.add(new_user)
     await session.commit()
     await session.refresh(new_user)
+
+    # 4. ВАЖНО: Добавляем флаг обратно в объект перед отправкой ответа
+    # Так как response_model=UserRead требует этот флаг, мы должны его "прикрепить"
+    # к объекту new_user перед тем, как FastAPI его вернет.
+    setattr(new_user, "remember_me_flag", remember_me)
+
     return new_user
 

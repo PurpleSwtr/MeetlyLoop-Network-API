@@ -35,7 +35,7 @@ services:
       - "8000:8000"
     volumes:
       - ./backend/src:/code/src
-      # - ./frontend/dist:/code/dist  # <--- УДАЛИТЕ ИЛИ ЗАКОММЕНТИРУЙТЕ ЭТУ СТРОКУ
+      - ./backend/alembic:/code/alembic
     env_file:
       - ./.env
     # Указываем, что нужно дождаться, пока сервис 'db' не станет "здоровым"

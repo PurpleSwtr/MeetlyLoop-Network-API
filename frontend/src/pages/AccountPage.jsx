@@ -11,8 +11,8 @@ function AccountPage() {
 
   return (
     <div className="pt-40 px-20"> 
-      <div className="flex justify-between items-start">
-        <div className="w-1/3 max-w-sm">
+      <div className="justify-end">
+        <div className="w-2/3 max-w-sm ml-auto">
           {isRegistrationComplete ? (
             <SuccessRegSignForm />
           ) : (

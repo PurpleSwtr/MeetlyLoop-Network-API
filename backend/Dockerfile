@@ -26,7 +26,7 @@ COPY ./backend/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
 # Копируем исходный код бэкенда
-COPY ./backend /code
+COPY ./backend/ /code/
 
 # --- ГЛАВНЫЙ МОМЕНТ! ---
 # Копируем папку `dist` из контейнера-сборщика (frontend-builder)

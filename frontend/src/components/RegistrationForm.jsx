@@ -6,12 +6,15 @@ import CustomSwitch from "./Switch.jsx"
 export default function RegForm({ onSuccess }) {
   // 2. Создаем состояние для хранения сообщения об ошибке
   const [errorMessage, setErrorMessage] = useState('');
+  const [rememberMe, setRememberMe] = useState(true);
 
   // Этот обработчик сработает ТОЛЬКО если все поля валидны
   const handleFormFinish = async (values) => {
     setErrorMessage(''); // Очищаем ошибку при успешной отправке
+
     values.description = "";
-  
+    values.remember_me_flag = rememberMe;
+    
     console.log('Отправляем на бэкенд:', values);
 
     try {
@@ -90,7 +93,7 @@ export default function RegForm({ onSuccess }) {
             </Form.Item>
             
             <Form.Item className="text-right">
-            <CustomSwitch></CustomSwitch>
+            <CustomSwitch checked={rememberMe} onChange={setRememberMe} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" block size="large">

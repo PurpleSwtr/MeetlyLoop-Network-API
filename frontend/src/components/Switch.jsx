@@ -2,7 +2,7 @@ import React from 'react';
 import { CheckOutlined, CloseOutlined } from '@ant-design/icons';
 import { Space, Switch, ConfigProvider } from 'antd';
 
-const CustomSwitch = () => (
+const CustomSwitch = ({ checked, onChange }) => (
   <ConfigProvider
     theme={{
       components: {
@@ -19,7 +19,8 @@ const CustomSwitch = () => (
       <Switch
         checkedChildren={<CheckOutlined />}
         unCheckedChildren={<CloseOutlined />}
-        defaultChecked
+        checked={checked} 
+        onChange={onChange}
         // 3. Убран 'size="small"', чтобы переключатель был стандартного размера
       />
       <span className="text-gray-600 mr-1 text-base">

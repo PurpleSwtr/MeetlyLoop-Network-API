@@ -30,7 +30,9 @@ app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
 def read_root():
     return FileResponse("dist/index.html")
 
-
+@app.get("/{path:path}", include_in_schema=False)
+async def catch_all(path: str):
+    return FileResponse("dist/index.html")
 
 
 

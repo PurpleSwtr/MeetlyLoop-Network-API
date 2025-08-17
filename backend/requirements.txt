@@ -21,5 +21,9 @@ httpx
 async-lru
 rich
 
+# --- Auth ---
+
+authx
+
 # --- Formatting & Linting (NEW) ---
 black

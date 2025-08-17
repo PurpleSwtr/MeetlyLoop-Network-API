@@ -7,8 +7,8 @@ const CustomSwitch = ({ checked, onChange }) => (
     theme={{
       components: {
         Switch: {
-          colorPrimary: "#5fb518",
-          colorPrimaryHover: "#b0db7a",
+          colorPrimaryHover: "#5fb518",
+          colorPrimary: "#b0db7a",
         },
       },
     }}
@@ -16,6 +16,9 @@ const CustomSwitch = ({ checked, onChange }) => (
     {/* 1. Space теперь горизонтальный и центрированный по вертикали */}
     <Space align="center"> 
       {/* 2. Текст обернут в span для стилизации и добавлен отступ */}
+      <span className="text-gray-600 mr-1 text-base font-stretch-50%" >
+        Запомнить меня
+      </span>
       <Switch
         checkedChildren={<CheckOutlined />}
         unCheckedChildren={<CloseOutlined />}
@@ -23,9 +26,6 @@ const CustomSwitch = ({ checked, onChange }) => (
         onChange={onChange}
         // 3. Убран 'size="small"', чтобы переключатель был стандартного размера
       />
-      <span className="text-gray-600 mr-1 text-base">
-        Запомнить меня
-      </span>
     </Space>
   </ConfigProvider>
 );

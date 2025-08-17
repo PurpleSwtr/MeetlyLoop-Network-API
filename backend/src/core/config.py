@@ -9,6 +9,7 @@ class Settings(BaseSettings):
     DB_NAME: str
     
     ECHO_MODE: bool
+    DEV_MODE: bool
     JWT_KEY: str
     JWT_ACCESS_COOKIE: str
     

@@ -17,7 +17,7 @@ class UsersORM(Base):
     id: Mapped[intpk]
     nickname: Mapped[str] = mapped_column(String) 
     email: Mapped[str] = mapped_column(String, nullable=True)
-    password_hash: Mapped[str] = mapped_column(String, nullable=True)
+    password: Mapped[str] = mapped_column(String, nullable=True)
     description: Mapped[str] = mapped_column(String, nullable=True)
     profile_photo_url: Mapped[str] = mapped_column(String, nullable=True)
 

@@ -85,7 +85,7 @@ export default function RegForm({ onSuccess }) {
             </Form.Item>
 
             <Form.Item 
-              name="password_hash" 
+              name="password" 
               label="Пароль"
               rules={[{ required: true, message: 'Введите пароль!' }]}
             >

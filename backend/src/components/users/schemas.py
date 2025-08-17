@@ -10,7 +10,7 @@ class UserRead(BaseModel):
 class UserCreate(BaseModel):
     nickname: str
     email: str
-    password_hash: str
+    password: str
     description: Optional[str]
     remember_me_flag: bool
 
@@ -18,4 +18,5 @@ class UserCreate(BaseModel):
 class UserAccount(BaseModel):
     nickname: str
     email: str
+    password: str
     description: Optional[str]

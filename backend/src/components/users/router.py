@@ -1,10 +1,14 @@
 # src/models/users/router.py
 
-from fastapi import APIRouter
+import asyncio
+from fastapi import APIRouter, status
 from sqlalchemy import select
 from src.api.dependencies import SessionDep
+
 from src.components.users.models import UsersORM
 from src.components.users.schemas import UserRead, UserCreate, UserAccount
+
+from src.components.service.password_hasher import hash_password
 
 router = APIRouter()
 
@@ -39,7 +43,8 @@ async def get_single_user(session: SessionDep, user_id: int):
         "/create_user",
         tags=["👥 Пользователи"],
         summary="Создать пользователя",
-        response_model=UserRead
+        response_model=UserRead,
+        status_code=status.HTTP_201_CREATED
         )
 async def create_new_user(
     session: SessionDep, 
@@ -50,14 +55,17 @@ async def create_new_user(
     
     # 2. "Вытаскиваем" флаг из словаря. Теперь в user_data_dict его нет.
     remember_me = user_data_dict.pop("remember_me_flag")
+    user_password = user_data_dict.pop("password")
     
-    # --- Вот здесь ты можешь использовать флаг для своей логики ---
-    print(f"Флаг 'Запомнить меня' получен: {remember_me}")
-    if remember_me:
-        print("Нужно будет сгенерировать долгоживущий токен!")
-    else:
-        print("Нужно будет сгенерировать короткоживущий токен.")
-    # -------------------------------------------------------------
+    hashed_password = await asyncio.to_thread(hash_password, user_password)
+    user_data_dict["password"] = hashed_password
+    # # --- Вот здесь ты можешь использовать флаг для своей логики ---
+    # print(f"Флаг 'Запомнить меня' получен: {remember_me}")
+    # if remember_me:
+    #     print("Нужно будет сгенерировать долгоживущий токен!")
+    # else:
+    #     print("Нужно будет сгенерировать короткоживущий токен.")
+    # # -------------------------------------------------------------
 
     # 3. Создаем объект ORM только с теми данными, что остались в словаре
     new_user = UsersORM(**user_data_dict)

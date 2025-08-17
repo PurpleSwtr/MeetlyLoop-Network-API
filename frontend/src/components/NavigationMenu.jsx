@@ -25,7 +25,7 @@ const Menu = () => {
   const activeColor = "#7259F3";
 
   return (
-    <div className="border border-gray-300 rounded-lg mr-7">
+    <div className="border-2 border-gray-300 rounded-lg mr-7">
     <ConfigProvider
       theme={{
         components: {

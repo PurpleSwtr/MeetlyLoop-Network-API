@@ -25,7 +25,7 @@ export default function ComponentHeader() {
         </span>
       </div>
       <div className='flex mx-auto my-auto'>
-        <ComponentSearchLine className='w-full max-w-xl drop-shadow-lg' />
+        <ComponentSearchLine className='w-full max-w-xl drop-shadow-lg border-1 border-gray-300 rounded-lg' />
       </div>
       <div className='drop-shadow-lg'>
         <ComponentCard />

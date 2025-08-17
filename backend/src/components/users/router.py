@@ -50,7 +50,7 @@ async def create_new_user(
     session: SessionDep, 
     user_data: UserCreate
     ):
-    # 1. Превращаем Pydantic-схему в обычный словарь
+    # 1. Превращаем Pydantic-схему в обычный словарь        
     user_data_dict = user_data.model_dump()
     
     # 2. "Вытаскиваем" флаг из словаря. Теперь в user_data_dict его нет.
@@ -77,7 +77,7 @@ async def create_new_user(
     # 4. ВАЖНО: Добавляем флаг обратно в объект перед отправкой ответа
     # Так как response_model=UserRead требует этот флаг, мы должны его "прикрепить"
     # к объекту new_user перед тем, как FastAPI его вернет.
-    setattr(new_user, "remember_me_flag", remember_me)
+    # setattr(new_user, "remember_me_flag", remember_me)
 
     return new_user
 

@@ -1,13 +1,5 @@
-import React, { useState } from 'react';
-import RegForm from "../components/RegistrationForm.jsx";
-import SuccessRegSignForm from "../components/SuccessRegSignForm.jsx";
 
 function MainPage() {
-  const [isRegistrationComplete, setRegistrationComplete] = useState(false);
-
-  const handleRegistrationSuccess = () => {
-    setRegistrationComplete(true);
-  };
 
   return (
     <div className="pt-40 px-20"> 
@@ -21,13 +13,7 @@ function MainPage() {
             Ваш новый способ общения.
           </p>
         </div>
-        <div className="w-1/3 max-w-sm">
-          {isRegistrationComplete ? (
-            <SuccessRegSignForm />
-          ) : (
-            <RegForm onSuccess={handleRegistrationSuccess} />
-          )}
-        </div>
+        
       </div>
     </div>
   );

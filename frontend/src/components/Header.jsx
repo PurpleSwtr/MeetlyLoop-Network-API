@@ -19,7 +19,7 @@ export default function ComponentHeader() {
       <div className='flex items-center gap-x-1'>
         <img src={logo} alt='Логотип' className='h-25 w-auto' />
         <span className='text-4xl'>
-          <LinearGradient gradient={["to left", "#ff68f0 , #17acff"]}>
+          <LinearGradient gradient={["to left", "#7259F3 , #17acff"]}>
             MeetlyLoop
           </LinearGradient>
         </span>

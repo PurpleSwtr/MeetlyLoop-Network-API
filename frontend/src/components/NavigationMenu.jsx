@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+
 import {
   HomeOutlined,
   UserOutlined,
@@ -9,16 +11,17 @@ import {
 import { Segmented, ConfigProvider } from "antd";
 
 const options = [
-  { label: "Главная", value: "Home", icon: <HomeOutlined /> },
-  { label: "Аккаунт", value: "Account", icon: <UserOutlined /> },
+  { label: "Главная", value: "/", icon: <HomeOutlined /> },
+  { label: "Аккаунт", value: "/account", icon: <UserOutlined /> },
   { label: "Посты", value: "Posts", icon: <ProductOutlined /> },
   { label: "Пользователи", value: "Users", icon: <CommentOutlined /> },
   { label: "Настройки", value: "Settings", icon: <SettingOutlined /> },
 ];
 
-const Demo = ({ onMenuChanged }) => {
-  const [selectedValue, setSelectedValue] = useState("Home");
-  console.log("", selectedValue);
+const Menu = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  
   const activeColor = "#7259F3";
 
   return (
@@ -36,17 +39,13 @@ const Demo = ({ onMenuChanged }) => {
     >
       <Segmented
         options={options}
-        value={selectedValue}
-        onChange={setSelectedValue}
+        value={location.pathname}
+        onChange={(value) => navigate(value)}
         size='large'
         className="border-12 border-white"
       />
     </ConfigProvider>
     </div>
-
   );
-
-  
 };
-// p-2 border border-gray-300 rounded-lg
-export default Demo;
+export default Menu;

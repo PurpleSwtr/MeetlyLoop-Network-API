@@ -1,6 +1,7 @@
 import { useState } from 'react'; // 👈 1. Импортируем useState
 import { Card, Form, Input, Button, ConfigProvider } from "antd";
 import axios from 'axios';
+import CustomSwitch from "./Switch.jsx"
 
 export default function RegForm({ onSuccess }) {
   // 2. Создаем состояние для хранения сообщения об ошибке
@@ -88,6 +89,9 @@ export default function RegForm({ onSuccess }) {
               <Input.Password placeholder="password" size="large" />
             </Form.Item>
             
+            <Form.Item className="text-right">
+            <CustomSwitch></CustomSwitch>
+            </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" block size="large">
                 Зарегистрироваться

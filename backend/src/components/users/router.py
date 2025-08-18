@@ -1,14 +1,16 @@
 # src/models/users/router.py
 
 import asyncio
-from fastapi import APIRouter, status
-from sqlalchemy import select
+from fastapi import APIRouter, HTTPException, Response, status
+from sqlalchemy import or_, select
 from src.api.dependencies import SessionDep
 
 from src.components.users.models import UsersORM
 from src.components.users.schemas import UserRead, UserCreate, UserAccount
 
 from src.components.service.password_hasher import hash_password
+
+from src.components.service.auth_service import create_token, security
 
 router = APIRouter()
 
@@ -48,36 +50,45 @@ async def get_single_user(session: SessionDep, user_id: int):
         )
 async def create_new_user(
     session: SessionDep, 
-    user_data: UserCreate
-    ):
-    # 1. Превращаем Pydantic-схему в обычный словарь        
-    user_data_dict = user_data.model_dump()
-    
-    # 2. "Вытаскиваем" флаг из словаря. Теперь в user_data_dict его нет.
-    remember_me = user_data_dict.pop("remember_me_flag")
-    user_password = user_data_dict.pop("password")
-    
-    hashed_password = await asyncio.to_thread(hash_password, user_password)
-    user_data_dict["password"] = hashed_password
-    # # --- Вот здесь ты можешь использовать флаг для своей логики ---
-    # print(f"Флаг 'Запомнить меня' получен: {remember_me}")
-    # if remember_me:
-    #     print("Нужно будет сгенерировать долгоживущий токен!")
-    # else:
-    #     print("Нужно будет сгенерировать короткоживущий токен.")
-    # # -------------------------------------------------------------
+    user_data: UserCreate,
+    response: Response
+):
+    # --- Шаг 1: Проверка на дубликаты (остается без изменений) ---
+    query = select(UsersORM).where(
+        or_(UsersORM.nickname == user_data.nickname, UsersORM.email == user_data.email)
+    )
+    if await session.scalar(query):
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail="Пользователь с таким никнеймом или email уже существует."
+        )
 
-    # 3. Создаем объект ORM только с теми данными, что остались в словаре
-    new_user = UsersORM(**user_data_dict)
+    # --- Шаг 2: Хешируем пароль ---
+    hashed_password = await asyncio.to_thread(hash_password, user_data.password)
     
+    # --- Шаг 3: Создаем ORM-объект, исключая ненужные поля ---
+    # .model_dump(exclude={"password", "remember_me_flag"}) создает словарь
+    # без пароля в открытом виде и без флага, который не нужен в БД.
+    user_data_for_db = user_data.model_dump(
+        exclude={"password", "remember_me_flag"}
+    )
+    
+    new_user = UsersORM(
+        **user_data_for_db,
+        password=hashed_password # Добавляем хешированный пароль отдельно
+    )
+    
+    # --- Шаг 4: Сохранение в БД (остается без изменений) ---
     session.add(new_user)
     await session.commit()
     await session.refresh(new_user)
 
-    # 4. ВАЖНО: Добавляем флаг обратно в объект перед отправкой ответа
-    # Так как response_model=UserRead требует этот флаг, мы должны его "прикрепить"
-    # к объекту new_user перед тем, как FastAPI его вернет.
-    # setattr(new_user, "remember_me_flag", remember_me)
+    # --- Шаг 5: Создание токена (остается без изменений) ---
+    create_token(
+        user_id=new_user.id,
+        response=response,
+        remember_me=user_data.remember_me_flag # Берем флаг напрямую из Pydantic-модели
+    )
 
     return new_user
 

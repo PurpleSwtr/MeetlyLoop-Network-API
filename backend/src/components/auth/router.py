@@ -37,7 +37,7 @@ async def login_user(
     if not is_password_valid:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail = "Неверный логин или пароль")
 
-    return create_token(user_id=user.id, response=response)
+    return create_token(user_id=user.id, response=response, remember_me=user_data.remember_me_flag)
 
     # session.add(new_user)       
 

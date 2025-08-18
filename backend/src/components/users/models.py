@@ -24,6 +24,6 @@ class UsersORM(Base):
     created_at: Mapped[created_at]
     updated_at: Mapped[updated_at]
     
-    repr_cols = ("created_at", "updated_at")
+    repr_cols = ()
 
     posts: Mapped[list["PostsORM"]] = relationship(back_populates="author")

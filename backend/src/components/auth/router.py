@@ -6,7 +6,7 @@ from src.api.dependencies import SessionDep
 from src.components.users.models import UsersORM
 from src.components.auth.schemas import UserLogin
 
-from backend.src.components.service.auth_service import create_token, security
+from src.components.service.auth_service import create_token, security
 from src.components.service.password_hasher import verify_password
 
 

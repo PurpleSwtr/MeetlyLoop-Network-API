@@ -10,7 +10,6 @@ from src.api import main_router
 
 from src.core.config import settings # <-- Импортируем settings
 
-IS_TEST_MODE = settings.TEST_MODE
 
 app = FastAPI(
     title="My Network API",
@@ -28,7 +27,7 @@ app.include_router(main_router, prefix="/api")
 
 
 
-if not IS_TEST_MODE:
+if not settings.TEST_MODE:
     app.mount("/assets", StaticFiles(directory="dist/assets"), name="assets")
 
     @app.get("/", include_in_schema=False,

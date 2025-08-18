@@ -9,7 +9,8 @@ psycopg2-binary
 alembic
 
 # --- Security & Authentication ---
-passlib[bcrypt]
+passlib
+bcrypt
 python-jose[cryptography]
 
 # --- Settings & Environment ---

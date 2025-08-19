@@ -1,9 +1,12 @@
+// frontend/src/components/Header.jsx
+
 import logo from "../assets/icons/MeetlyLoopUp-Photoroom.png"
 import ComponentCard from "./NavigationMenu.jsx"
 import ComponentSearchLine from "./SearchLine.jsx"
 import { LinearGradient } from "react-text-gradients"
 
-export default function ComponentHeader() {
+// 1. Компонент теперь принимает props
+export default function ComponentHeader({ isAuthenticated, onLogout }) {
   return (
     <header
       className='
@@ -28,7 +31,8 @@ export default function ComponentHeader() {
         <ComponentSearchLine className='w-full max-w-xl drop-shadow-lg border-1 border-gray-300 rounded-lg' />
       </div>
       <div className='drop-shadow-lg'>
-        <ComponentCard />
+        {/* 2. Передаем props дальше в компонент меню */}
+        <ComponentCard isAuthenticated={isAuthenticated} onLogout={onLogout} />
       </div>
     </header>
   )

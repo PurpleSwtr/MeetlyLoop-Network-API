@@ -1,4 +1,6 @@
-import { useState } from 'react'; // 👈 1. Импортируем useState
+// frontend/src/components/LoginForm.jsx
+
+import { useState } from 'react';
 import { Card, Form, Input, Button, ConfigProvider } from "antd";
 import axios from 'axios';
 import CustomSwitch from "./Switch.jsx"
@@ -10,26 +12,33 @@ export default function LoginForm({ onSuccess }) {
   const handleFormFinish = async (values) => {
     setErrorMessage('');
 
-    values.description = "";
-    values.remember_me_flag = rememberMe;
+    // Готовим данные для логина
+    const loginData = {
+      email: values.email,
+      password: values.password, // Имя поля должно быть 'password'
+      remember_me_flag: rememberMe,
+    };
     
-    console.log('Отправляем на бэкенд:', values);
+    console.log('Отправляем на бэкенд для логина:', loginData);
 
     try {
-      const response = await axios.post('/api/create_user', values);
-      console.log('response:', response.data);
+      // ИЗМЕНЕН URL: теперь это эндпоинт для получения токена
+      const response = await axios.post('/api/auth/token', loginData);
+      console.log('Успешный логин:', response.data);
       if (onSuccess) {
         onSuccess();
       }
     } 
     catch (error) {
-      console.error("Не удалось отправить запрос:", error);
-      // Показываем ошибку, если что-то пошло не так на сервере
-      setErrorMessage('Ошибка регистрации. Попробуйте снова.'); 
+      console.error("Не удалось войти:", error);
+      if (error.response && error.response.status === 401) {
+          setErrorMessage('Неверный логин или пароль.');
+      } else {
+          setErrorMessage('Ошибка входа. Попробуйте снова.'); 
+      }
     }
   };   
 
-  // 3. Этот обработчик сработает, если валидация НЕ пройдена
   const handleFormFinishFailed = (errorInfo) => {
     console.log('Validation Failed:', errorInfo);
     setErrorMessage('Пожалуйста, заполните все обязательные поля.');
@@ -61,8 +70,6 @@ export default function LoginForm({ onSuccess }) {
             onFinish={handleFormFinish}
             onFinishFailed={handleFormFinishFailed}
           >
-            
-
             <Form.Item 
               name="email" 
               label="Email"
@@ -74,8 +81,9 @@ export default function LoginForm({ onSuccess }) {
               <Input type="email" placeholder="email@example.com" size="large" />
             </Form.Item>
 
+            {/* ИЗМЕНЕНО ИМЯ ПОЛЯ: с password_hash на password */}
             <Form.Item 
-              name="password_hash" 
+              name="password" 
               label="Пароль"
               rules={[{ required: true, message: 'Введите пароль!' }]}
             >
@@ -83,7 +91,7 @@ export default function LoginForm({ onSuccess }) {
             </Form.Item>
             
             <Form.Item className="text-right">
-            <CustomSwitch checked={rememberMe} onChange={setRememberMe} />
+              <CustomSwitch checked={rememberMe} onChange={setRememberMe} />
             </Form.Item>
             <Form.Item>
               <Button type="primary" htmlType="submit" block size="large">

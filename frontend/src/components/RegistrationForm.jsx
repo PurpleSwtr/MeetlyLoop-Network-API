@@ -1,37 +1,49 @@
-import { useState } from 'react'; // 👈 1. Импортируем useState
+// frontend/src/components/RegistrationForm.jsx
+
+import { useState } from 'react';
 import { Card, Form, Input, Button, ConfigProvider } from "antd";
 import axios from 'axios';
 import CustomSwitch from "./Switch.jsx"
 
 export default function RegForm({ onSuccess }) {
-  // 2. Создаем состояние для хранения сообщения об ошибке
   const [errorMessage, setErrorMessage] = useState('');
   const [rememberMe, setRememberMe] = useState(true);
 
-  // Этот обработчик сработает ТОЛЬКО если все поля валидны
   const handleFormFinish = async (values) => {
-    setErrorMessage(''); // Очищаем ошибку при успешной отправке
+    setErrorMessage('');
 
-    values.description = "";
-    values.remember_me_flag = rememberMe;
+    const registrationData = {
+        nickname: values.nickname,
+        email: values.email,
+        password: values.password,
+        description: "", // Описание можно будет добавить в профиле
+        remember_me_flag: rememberMe,
+    };
     
-    console.log('Отправляем на бэкенд:', values);
+    console.log('Отправляем на бэкенд:', registrationData);
 
     try {
-      const response = await axios.post('/api/create_user', values);
-      console.log('response:', response.data);
+      // URL правильный, здесь все хорошо
+      const response = await axios.post('/api/users/create_user', registrationData);
+      console.log('Успешная регистрация:', response.data);
       if (onSuccess) {
-        onSuccess();
+        onSuccess(); // Вызываем колбэк для переключения на экран успеха
       }
     } 
     catch (error) {
       console.error("Не удалось отправить запрос:", error);
-      // Показываем ошибку, если что-то пошло не так на сервере
-      setErrorMessage('Ошибка регистрации. Попробуйте снова.'); 
+      
+      // --- УЛУЧШЕННАЯ ЛОГИКА ОБРАБОТКИ ОШИБОК ---
+      if (error.response && error.response.status === 409) {
+          // Если сервер вернул 409 Conflict
+          setErrorMessage('Пользователь с таким email или никнеймом уже существует.');
+      } else {
+          // Для всех остальных ошибок (нет сети, 500-е и т.д.)
+          setErrorMessage('Произошла ошибка. Пожалуйста, попробуйте снова.'); 
+      }
     }
   };   
 
-  // 3. Этот обработчик сработает, если валидация НЕ пройдена
   const handleFormFinishFailed = (errorInfo) => {
     console.log('Validation Failed:', errorInfo);
     setErrorMessage('Пожалуйста, заполните все обязательные поля.');
@@ -58,13 +70,11 @@ export default function RegForm({ onSuccess }) {
         }
       >
         <div className="min-h-[380px] flex flex-col justify-center">
-          {/* 4. Добавляем обработчики в Form */}
           <Form 
             layout="vertical" 
             onFinish={handleFormFinish}
             onFinishFailed={handleFormFinishFailed}
           >
-            {/* 5. Добавляем правила валидации (rules) */}
             <Form.Item 
               name="nickname" 
               label="Имя пользователя"
@@ -101,7 +111,6 @@ export default function RegForm({ onSuccess }) {
               </Button>
             </Form.Item>
 
-            {/* 6. Показываем ошибку из состояния, если она есть */}
             {errorMessage && (
               <p className="text-center text-lg text-red-400">
                 {errorMessage}

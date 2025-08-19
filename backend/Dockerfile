@@ -1,36 +1,32 @@
 # ./backend/Dockerfile
 
 # --- СТУПЕНЬ 1: Сборщик Фронтенда (The Frontend Builder) ---
-# Мы используем образ Node.js, даем ему псевдоним "frontend-builder"
-FROM node:18 AS frontend-builder
-
-# Устанавливаем рабочую директорию
+FROM node:18-alpine AS frontend-builder
 WORKDIR /app
 
-# Копируем ИСХОДНЫЙ код фронтенда в этот временный контейнер
-COPY ./frontend /app
+# 1. Копируем ТОЛЬКО файлы с зависимостями
+COPY frontend/package.json frontend/package-lock.json* ./
 
-# Устанавливаем зависимости и ЗАПУСКАЕМ СБОРКУ
+# 2. Устанавливаем зависимости. Этот шаг будет кэширован, пока package.json не изменится.
 RUN npm install
+
+# 3. Теперь копируем весь остальной код фронтенда
+COPY frontend/ ./
+
+# 4. Запускаем сборку. Этот шаг будет выполняться при любом изменении кода.
 RUN npm run build
 
 
 # --- СТУПЕНЬ 2: Финальный Бэкенд-сервер (The Final Backend) ---
-# Начинаем с чистого листа, с образа Python, как и раньше
-FROM python:3.11-slim
-
+FROM python:3.11-slim-bookworm
 WORKDIR /code
 
-# Копируем зависимости бэкенда и устанавливаем их
-COPY ./backend/requirements.txt /code/requirements.txt
+# По аналогии, сначала зависимости бэкенда
+COPY backend/requirements.txt /code/requirements.txt
 RUN pip install --no-cache-dir --upgrade -r /code/requirements.txt
 
-# Копируем исходный код бэкенда
-COPY ./backend/ /code/
+# Затем остальной код бэкенда
+COPY backend/ /code/
 
-# --- ГЛАВНЫЙ МОМЕНТ! ---
-# Копируем папку `dist` из контейнера-сборщика (frontend-builder)
-# в наш финальный контейнер, где FastAPI сможет ее найти.
+# Копируем свежесобранный фронтенд из первой ступени
 COPY --from=frontend-builder /app/dist /code/dist
-
-# Команда запуска остается в docker-compose.yml

@@ -3,11 +3,10 @@
 from fastapi import APIRouter, HTTPException, status
 from src.core.database import Base, async_engine
 from src.core.config import settings 
-
-router = APIRouter(prefix="/dev")
+        
+router = APIRouter(prefix="/dev", tags=["🚧 [DEV TOOLS ONLY]"])
 
 @router.delete("/reset_database",
-        tags=["🚧 [DEV TOOLS ONLY]"],
         summary="УДАЛИТЬ И ПЕРЕСОЗДАТЬ ВСЕ ТАБЛИЦЫ В БАЗЕ",
         )
 async def reset_database_dev():

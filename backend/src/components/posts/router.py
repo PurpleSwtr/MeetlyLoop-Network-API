@@ -6,10 +6,9 @@ from .schemas import PostRead, PostCreate
 from src.api.dependencies import SessionDep
 from src.components.posts.models import PostsORM
 
-router = APIRouter()
+router = APIRouter(prefix="/posts", tags=["📝 Посты"])
 
 @router.get("/get_posts",
-            tags=["📝 Посты"],
             summary="Получить список постов с авторами",
             response_model=list[PostRead]) # <-- Схема ответа
 async def get_posts(session: SessionDep):
@@ -25,7 +24,6 @@ async def get_posts(session: SessionDep):
 
 
 @router.get("/get_posts/user/{user_id}",
-            tags=["📝 Посты"],
             summary="Получить список постов пользователя",
             response_model=list[PostRead]) # <-- Схема ответа
 async def get_posts_user(session: SessionDep, user_id: int):
@@ -43,7 +41,6 @@ async def get_posts_user(session: SessionDep, user_id: int):
 
 @router.post(
         "/create_post",
-        tags=["📝 Посты"],
         summary="Создать пост",
         response_model=PostRead
         )
@@ -51,14 +48,9 @@ async def create_new_post(session: SessionDep, post_data: PostCreate):
     new_post = PostsORM(**post_data.model_dump())
     session.add(new_post)
     await session.commit()
+    # await session.refresh(new_post) # Обновляем объект данными из БД
 
-    query = (
-        select(PostsORM)
-        .where(PostsORM.id == new_post.id)
-        .options(selectinload(PostsORM.author))
-    )
-    result = await session.execute(query)
-
-    created_post_with_author = result.scalars().one()
-
-    return created_post_with_author
+    # Чтобы загрузить автора, можно сделать так, если он не загружается автоматически:
+    await session.refresh(new_post, attribute_names=['author'])
+    
+    return new_post # Возвращаем уже готовый объект

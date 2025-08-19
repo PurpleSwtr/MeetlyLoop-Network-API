@@ -10,17 +10,17 @@ from src.components.service.auth_service import create_token, security
 from src.components.service.password_hasher import verify_password
 
 
-router = APIRouter(prefix="/auth")
+router = APIRouter(prefix="/auth", tags=["🔒 Авторизация"])
 
 
                             
-@router.post("/login_user",
-            tags=["🔒 Авторизация"],
-            summary="Залогинить пользователя",)             
-async def login_user(
+@router.post("/token", # было "/login_user"
+            summary="Получить JWT токен (залогиниться)",)             
+async def login_for_access_token( # было login_user
     session: SessionDep, 
     user_data: UserLogin,
-    response: Response):
+    response: Response
+):
     query = (
         select(UsersORM)
     .where(UsersORM.email == user_data.email))
@@ -43,7 +43,6 @@ async def login_user(
 
 @router.get(path="/protected", 
             dependencies=[Depends (security.access_token_required)],
-            tags=["🔒 Авторизация"],
             summary="Получить только авторизованным пользователям",)
 def protected():
 

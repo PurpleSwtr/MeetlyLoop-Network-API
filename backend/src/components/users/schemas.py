@@ -20,3 +20,8 @@ class UserAccount(BaseModel):
     email: str
     password: str
     description: Optional[str]
+
+class UserPublicProfile(BaseModel):
+    id: int
+    nickname: str
+    description: Optional[str]    

@@ -6,7 +6,7 @@ async def test_create_user(ac: AsyncClient):
     user_data = {
         "nickname": "testuser",
         "email": "test@example.com",
-        "password_hash": "somehash", # Пока просто строка
+        "password": "somehash", # Пока просто строка
         "description": "A test user",
         "remember_me_flag": True
     }

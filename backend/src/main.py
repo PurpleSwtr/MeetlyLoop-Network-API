@@ -9,12 +9,12 @@ from fastapi.responses import FileResponse
 from src.api import main_router
 
 from src.core.config import settings # <-- Импортируем settings
-
+from src.core.exceptions import register_exception_handlers
 
 app = FastAPI(
     title="My Network API",
 )
-
+register_exception_handlers(app)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],

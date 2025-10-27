@@ -1,7 +1,7 @@
 
 # MeetlyLoop
 
-![Python](https://img.shields.io/badge/Python-3.11-3776AB?style=for-the-badge&logo=python&logoColor=white)
+![Python](https://img.shields.io/badge/Python-3.13-3776AB?style=for-the-badge&logo=python&logoColor=white)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-05998B?style=for-the-badge&logo=fastapi&logoColor=white)
 ![SQLAlchemy](https://img.shields.io/badge/SQLAlchemy-2.0-DF2F08?style=for-the-badge&logo=python&logoColor=white)
 ![Pydantic](https://img.shields.io/badge/Pydantic-2.0-E92063?style=for-the-badge&logo=pydantic&logoColor=white)
@@ -10,7 +10,7 @@
 ![Docker](https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white)
 
 Прототип социальной сети. 
-Весь проект полностью контейнеризирован с помощью Docker-compose. Также была попытка сделать фронтенд на React, но на тот момент у меня было слишком мало компетенции для этого.
+Весь проект полностью контейнеризирован с помощью Docker-compose. Также была попытка сделать фронтенд на React, но на тот момент у меня были довольно поверхностные знания в этой области, и попытка была не очень удачной. В дальнейшем я перешёл к изучению другого фреймворка (Vue.js).
 
 ### Установка
 

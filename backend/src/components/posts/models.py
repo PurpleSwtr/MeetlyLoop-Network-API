@@ -1,4 +1,3 @@
-# src/models/posts/models.py
 
 from typing import TYPE_CHECKING
 from sqlalchemy import ForeignKey, String
@@ -26,6 +25,6 @@ class PostsORM(Base):
 
     repr_cols = ("created_at", "updated_at")
 
-    author: Mapped["UsersORM"] = relationship(back_populates="posts") # , lazy="selectinload"
+    author: Mapped["UsersORM"] = relationship(back_populates="posts")
 
    

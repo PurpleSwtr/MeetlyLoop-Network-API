@@ -8,23 +8,30 @@ from fastapi.responses import FileResponse
 
 from src.api import main_router
 
-from src.core.config import settings # <-- Импортируем settings
+from src.core.config import settings
 from src.core.exceptions import register_exception_handlers
 
 app = FastAPI(
     title="My Network API",
 )
 register_exception_handlers(app)
+
+# --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
+# Указываем конкретный и ПРАВИЛЬНЫЙ адрес фронтенда
+origins = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173", # <-- Опечатка исправлена
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
 app.include_router(main_router, prefix="/api")
-
 
 
 if not settings.TEST_MODE:
@@ -41,6 +48,3 @@ if not settings.TEST_MODE:
     async def catch_all(path: str):
         if not path.startswith("api/"):
             return FileResponse("dist/index.html")
-
-
-

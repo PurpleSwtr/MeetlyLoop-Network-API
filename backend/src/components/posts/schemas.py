@@ -1,4 +1,4 @@
-# src/models/posts/schemas.py
+# backend/src/components/posts/schemas.py
 from datetime import datetime
 from typing import Optional
 from pydantic import BaseModel, ConfigDict
@@ -11,14 +11,12 @@ class PostRead(BaseModel):
     description: Optional[str]
     theme: Optional[str]
     updated_at: Optional[datetime]
-    
-    # Вложенная схема для автора
     author: UserRead
-
     model_config = ConfigDict(from_attributes=True)
 
+# --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
 class PostCreate(BaseModel):
-    user_id: int
+    # user_id: int  <-- УДАЛЯЕМ ЭТУ СТРОКУ
     title: str
-    description: Optional[str]
-    theme: Optional[str] 
+    description: Optional[str] = None # Дадим значение по умолчанию
+    theme: Optional[str] = None

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import axios from './api/axios'; // <-- Импортируем наш настроенный axios
 
 import ComponentHeader from "./components/Header.jsx";
 import MainPage from './pages/MainPage.jsx';
@@ -17,27 +18,27 @@ function App() {
     navigate('/posts');
   };
 
-  // --- НОВАЯ ФУНКЦИЯ ВЫХОДА ---
-  const handleLogout = () => {
-    setIsAuthenticated(false); // Сбрасываем состояние авторизации
-    // ВАЖНО: здесь нужно будет добавить запрос к бэкенду для удаления httpOnly cookie
-    console.log("Пользователь вышел из системы.");
-    navigate('/account'); // Перенаправляем на страницу входа
+  const handleLogout = async () => {
+    try {
+      // Отправляем запрос на бэкенд для удаления cookie
+      await axios.post('/api/auth/logout');
+      console.log("Successfully logged out from backend.");
+    } catch (error) {
+      console.error("Error during logout:", error);
+    } finally {
+      // Независимо от ответа сервера, выходим на фронтенде
+      setIsAuthenticated(false);
+      navigate('/account');
+    }
   };
 
   return (
     <div className="flex flex-col h-screen">
-      {/* Передаем состояние и обе функции в Header */}
       <ComponentHeader isAuthenticated={isAuthenticated} onLogout={handleLogout} />
       
       <Routes>
         <Route path="/" element={<MainPage />} />
-        
-        <Route 
-          path="/account" 
-          element={<AccountPage onLoginSuccess={handleLogin} />} 
-        />
-
+        <Route path="/account" element={<AccountPage onLoginSuccess={handleLogin} />} />
         <Route path="/posts" element={<PostsPage />} />
       </Routes>
     </div>

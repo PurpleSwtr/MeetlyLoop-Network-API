@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Card, Form, Input, Button, ConfigProvider } from "antd";
-import axios from 'axios';
+import axios from '../api/axios';
 import CustomSwitch from "./Switch.jsx"
 
 export default function LoginForm({ onSuccess }) {

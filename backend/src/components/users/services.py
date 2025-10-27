@@ -16,9 +16,7 @@ async def create_user_account(
 ) -> UsersORM:
     """
     Сервисная функция для создания аккаунта пользователя.
-    Инкапсулирует ТОЛЬКО логику создания пользователя в БД.
     """
-    # Шаги 1-3 остаются без изменений (проверка, хеширование, создание ORM)
     query = select(UsersORM).where(
         or_(UsersORM.nickname == user_data.nickname, UsersORM.email == user_data.email)
     )
@@ -35,11 +33,9 @@ async def create_user_account(
         password=hashed_password
     )
     
-    # Шаг 4: Сохранение в БД
     session.add(new_user)
     await session.commit()
     await session.refresh(new_user)
 
-    # Шаг 5: УДАЛЯЕМ создание токена. Это больше не ответственность этого сервиса.
 
     return new_user

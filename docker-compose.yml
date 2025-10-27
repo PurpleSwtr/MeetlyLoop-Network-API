@@ -1,9 +1,4 @@
-# ./my-fullstack-project/docker-compose.yml
-
-# Атрибут version больше не нужен, его можно убрать
-# version: '3.8' 
-
-services:
+ services:
   # 1. Сервис Базы данных PostgreSQL
   db:
     image: postgres:15-alpine
@@ -18,7 +13,6 @@ services:
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
-    # Проверка "здоровья", чтобы убедиться, что база данных готова принимать соединения
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 5s
@@ -28,8 +22,8 @@ services:
   # 2. Сервис Бэкенда
   backend:
     build:
-      context: . # Указываем, что Dockerfile находится в текущей директории
-      dockerfile: backend/Dockerfile # Явно указываем путь к Dockerfile
+      context: .
+      dockerfile: backend/Dockerfile
     container_name: MeetlyLoop_backend
     ports:
       - "8000:8000"
@@ -38,44 +32,35 @@ services:
       - ./backend/alembic:/code/alembic
     env_file:
       - ./.env
-    # Указываем, что нужно дождаться, пока сервис 'db' не станет "здоровым"
     depends_on:
       db:
         condition: service_healthy
-    # Ваша ВРЕМЕННАЯ команда для генерации миграций.
-    # После успешной генерации миграций, вы ее закомментируете
-    # и раскомментируете основную команду ниже.
-    
     # РЕРАН!!!
     # command: tail -f /dev/null
-
-  # --- ВАША ОСНОВНАЯ КОМАНДА (теперь раскомментирована) ---
     command: >
       sh -c "echo 'Running Alembic migrations...' && 
          //usr/local/bin/alembic upgrade head && 
          echo 'Starting FastAPI server...' &&
          uvicorn src.main:app --host 0.0.0.0 --port 8000 --reload"
 
-  # 3. Сервис Фронтенда
-  frontend:
-    build: ./frontend
-    container_name: MeetlyLoop_frontend
-    environment:
-      - CHOKIDAR_USEPOLLING=true
-    ports:
-      - "5173:5173"
-    volumes:
-      - ./frontend:/app
-      - /app/node_modules
-    env_file:
-      - ./.env
-    depends_on:
-      - backend
-    # --- ДОБАВЬТЕ ЭТИ ДВЕ СТРОКИ ---
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+  # # 3. Сервис Фронтенда
+  # frontend:
+  #   build: ./frontend
+  #   container_name: MeetlyLoop_frontend
+  #   environment:
+  #     - CHOKIDAR_USEPOLLING=true
+  #   ports:
+  #     - "5173:5173"
+  #   volumes:
+  #     - ./frontend:/app
+  #     - /app/node_modules
+  #   env_file:
+  #     - ./.env
+  #   depends_on:
+  #     - backend
+  #   extra_hosts:
+  #     - "host.docker.internal:host-gateway"
 
-# Определяем именованный том для хранения данных БД
-volumes:
-  postgres_data:
-    driver: local
+  # volumes:
+  #   postgres_data:
+  #     driver: local

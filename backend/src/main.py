@@ -16,11 +16,9 @@ app = FastAPI(
 )
 register_exception_handlers(app)
 
-# --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
-# Указываем конкретный и ПРАВИЛЬНЫЙ адрес фронтенда
 origins = [
     "http://localhost:5173",
-    "http://127.0.0.1:5173", # <-- Опечатка исправлена
+    "http://127.0.0.1:5173",
 ]
 
 app.add_middleware(

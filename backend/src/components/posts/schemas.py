@@ -14,9 +14,8 @@ class PostRead(BaseModel):
     author: UserRead
     model_config = ConfigDict(from_attributes=True)
 
-# --- ИЗМЕНЕНИЕ ЗДЕСЬ ---
 class PostCreate(BaseModel):
-    # user_id: int  <-- УДАЛЯЕМ ЭТУ СТРОКУ
+    # user_id: int
     title: str
-    description: Optional[str] = None # Дадим значение по умолчанию
+    description: Optional[str] = None
     theme: Optional[str] = None

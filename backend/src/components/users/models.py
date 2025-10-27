@@ -10,7 +10,6 @@ from src.core.database import Base
 if TYPE_CHECKING:
     from src.components.posts.models import PostsORM
 
-
 class UsersORM(Base):
     __tablename__ = "users" 
 

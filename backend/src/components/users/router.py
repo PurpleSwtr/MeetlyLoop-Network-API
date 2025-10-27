@@ -19,7 +19,7 @@ router = APIRouter(prefix="/users", tags=["👥 Пользователи"])
 
 @router.get("/get_users",
             summary="Получить список пользователей",
-            response_model=list[UserRead] # <-- Схема ответа
+            response_model=list[UserRead]
             )
 async def get_users(session: SessionDep):
 
@@ -35,7 +35,7 @@ async def get_users(session: SessionDep):
 """
 @router.get("/get_user/{user_id}",
             summary="Получить пользователя",
-            response_model=UserPublicProfile # <-- Схема ответа
+            response_model=UserPublicProfile
             )
 async def get_single_user(session: SessionDep, user_id: int):
     query = (
@@ -53,13 +53,11 @@ async def get_single_user(session: SessionDep, user_id: int):
             )
 async def get_current_user(
     session: SessionDep,
-    # 3. Используем Any в качестве type hint и даем переменной понятное имя
     payload: Any = Depends(security.access_token_required)
 ):
     """
     Возвращает информацию о пользователе, чей JWT токен был предоставлен.
     """
-    # 4. Обращаемся к атрибуту .sub, как и раньше
     user_id_from_token = payload.sub
     
     user_id = int(user_id_from_token)
